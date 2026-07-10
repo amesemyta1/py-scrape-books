@@ -21,8 +21,8 @@ class BooksSpider(scrapy.Spider):
     def parse_book(self, response: Response) -> Iterable[dict[str, Any]]:
         rating_map = {"One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5}
         rating_class = response.css("p.star-rating::attr(class)").get()
-        rating = None
 
+        rating = None
         if rating_class:
             rating_word = rating_class.split(" ")[-1]
             rating = rating_map.get(rating_word)
@@ -30,6 +30,7 @@ class BooksSpider(scrapy.Spider):
         stock_text = response.css(
             "p.instock.availability::text"
         ).re_first(r"\d+")
+
         amount_in_stock = int(stock_text) if stock_text else 0
 
         yield {
